@@ -26,7 +26,7 @@ async def place_order(req: OrderRequest):
         # Demo mode without DB
         return OrderResponse(
             success=True,
-            message=f"Commande confirmée pour {req.customer_name} ! {items_summary}. Total: {total:.2f}€. Prête dans environ 30 minutes.",
+            message=f"Order confirmed for {req.customer_name}! Your order includes: {items_summary}. Your total is {total:.2f} euros. It will be ready for pickup in approximately 30 minutes.",
             order_id="demo-order-456",
             total=total
         )
@@ -44,7 +44,7 @@ async def place_order(req: OrderRequest):
         
         return OrderResponse(
             success=True,
-            message=f"Commande confirmée pour {req.customer_name} ! {items_summary}. Total: {total:.2f}€. Votre commande sera prête dans environ 30 minutes.",
+            message=f"Order confirmed for {req.customer_name}! Your order includes: {items_summary}. Your total is {total:.2f} euros. It will be ready for pickup in approximately 30 minutes.",
             order_id=order_id,
             total=total
         )
