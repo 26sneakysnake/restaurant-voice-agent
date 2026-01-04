@@ -1,0 +1,128 @@
+{
+  "name": "Chez Marcel - Assistant Vocal",
+  "description": "Agent vocal pour le restaurant Chez Marcel",
+  "system_prompt": "Tu es l'assistant vocal du restaurant \"Chez Marcel\", un bistrot français traditionnel situé au 12 Rue de la Paix, 75002 Paris.\n\nTu peux :\n- Prendre des réservations\n- Donner des informations sur le menu (entrées, plats, desserts)\n- Prendre des commandes à emporter\n- Donner les horaires et l'adresse du restaurant\n\nComportement :\n- Sois naturel, chaleureux et professionnel\n- Parle en français avec un ton amical\n- Confirme toujours les détails avant de valider une réservation ou commande\n- Si tu ne comprends pas, demande poliment de répéter\n- Pour les allergies, mentionne les allergènes des plats concernés\n\nHoraires du restaurant :\n- Lundi au Jeudi : 12h00-14h30, 19h00-22h30\n- Vendredi et Samedi : 12h00-15h00, 19h00-23h00\n- Dimanche : Fermé\n\nCapacité : 50 couverts",
+  "voice": {
+    "provider": "elevenlabs",
+    "voice_id": "pNInz6obpgDQGcFmaJgB",
+    "language": "fr"
+  },
+  "tools": [
+    {
+      "name": "check_availability",
+      "description": "Vérifie la disponibilité pour une date, heure et nombre de personnes",
+      "webhook_url": "https://YOUR-API-URL.com/api/availability",
+      "method": "POST",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "description": "Date de la réservation au format YYYY-MM-DD"
+          },
+          "time": {
+            "type": "string",
+            "description": "Heure de la réservation au format HH:MM"
+          },
+          "party_size": {
+            "type": "integer",
+            "description": "Nombre de personnes"
+          }
+        },
+        "required": ["date", "time", "party_size"]
+      }
+    },
+    {
+      "name": "create_reservation",
+      "description": "Crée une réservation confirmée",
+      "webhook_url": "https://YOUR-API-URL.com/api/reservations",
+      "method": "POST",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "guest_name": {
+            "type": "string",
+            "description": "Nom du client pour la réservation"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Numéro de téléphone du client"
+          },
+          "date": {
+            "type": "string",
+            "description": "Date de la réservation au format YYYY-MM-DD"
+          },
+          "time": {
+            "type": "string",
+            "description": "Heure de la réservation au format HH:MM"
+          },
+          "party_size": {
+            "type": "integer",
+            "description": "Nombre de personnes"
+          }
+        },
+        "required": ["guest_name", "phone", "date", "time", "party_size"]
+      }
+    },
+    {
+      "name": "get_menu",
+      "description": "Récupère le menu du restaurant, optionnellement filtré par catégorie",
+      "webhook_url": "https://YOUR-API-URL.com/api/menu",
+      "method": "GET",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "description": "Catégorie optionnelle : entrées, plats, ou desserts"
+          }
+        },
+        "required": []
+      }
+    },
+    {
+      "name": "place_order",
+      "description": "Passe une commande à emporter",
+      "webhook_url": "https://YOUR-API-URL.com/api/orders",
+      "method": "POST",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "customer_name": {
+            "type": "string",
+            "description": "Nom du client"
+          },
+          "phone": {
+            "type": "string",
+            "description": "Numéro de téléphone"
+          },
+          "items": {
+            "type": "array",
+            "description": "Liste des plats commandés",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "quantity": { "type": "integer" },
+                "price": { "type": "number" }
+              }
+            }
+          }
+        },
+        "required": ["customer_name", "phone", "items"]
+      }
+    },
+    {
+      "name": "get_restaurant_info",
+      "description": "Récupère les informations du restaurant (adresse, horaires, téléphone)",
+      "webhook_url": "https://YOUR-API-URL.com/api/restaurant-info",
+      "method": "GET",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      }
+    }
+  ],
+  "post_call_webhook": "https://YOUR-API-URL.com/webhook/call-ended"
+}
